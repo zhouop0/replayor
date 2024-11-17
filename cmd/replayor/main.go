@@ -1,40 +1,5 @@
 package main
 
-// Main is the entry point for the replayor application. It sets up the necessary clients,
-// storage, and stats recorder, and returns a new replayor service.
-func Main() cliapp.LifecycleAction {
-    return func(cliCtx *cli.Context, close context.CancelCauseFunc) (cliapp.Lifecycle, error) {
-        // Load the replayor configuration
-        cfg, err := config.LoadReplayorConfig(cliCtx, logger)
-        if err != nil {
-            return nil, err
-        }
-
-        // Set up the necessary clients
-        c, err := clients.SetupClients(cfg, logger, ctx)
-        if err != nil {
-            return nil, err
-        }
-
-        // Create a new storage for benchmark stats
-        s, err := stats.NewStorage(logger, cfg)
-        if err != nil {
-            return nil, err
-        }
-
-        // Create a new stats recorder
-        statsRecorder := stats.NewStoredStats(s, logger, cfg.BenchmarkStartBlock)
-
-        // Return a new replayor service
-        return replayor.NewService(c, statsRecorder, cfg, logger, close), nil
-    }
-}
-// Main is the entry point for the replayor application. It sets up the necessary clients,
-// storage, and stats recorder, and returns a replayor.Service that can be used to
-// interact with the Ethereum engine API and emit metrics for block building.
-func Main() cliapp.LifecycleAction {
-    // ...
-}
 import (
 	"context"
 	"os"
